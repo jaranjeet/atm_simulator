@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import Routes from './routes';
+import rootReducer, { initialState as rootInitialState } from '../reducers/rootReducer';
+import { AppStateProvider, AppDispatchProvider } from '../providers/rootProvider';
+import combineReducer from '../utils/combineReducers';
 
 const theme = createMuiTheme({
   typography: {
@@ -23,9 +26,23 @@ const theme = createMuiTheme({
 
 export default function App() {
 
+  const combinedReducers = combineReducer({
+    root: rootReducer,
+  });
+
+
+
+  const [state, dispatch] = useReducer(combinedReducers, {
+    root: rootInitialState,
+  });
+
   return(
     <ThemeProvider theme={theme}>
-      <Routes />
+      <AppStateProvider value={state}>
+        <AppDispatchProvider value={dispatch}>
+          <Routes />
+        </AppDispatchProvider>
+      </AppStateProvider>
     </ThemeProvider>
   )
 }

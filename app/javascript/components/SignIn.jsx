@@ -9,19 +9,44 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
+import { Redirect } from 'react-router-dom';
 
 import styles from '../styles/signInStyle';
+import Service from '../services/signIn.js';
+import Action from '../actions/signInActions';
+import { AppStateContext, AppDispatchProvider, AppDispatchContext } from '../providers/rootProvider.js';
 
 const useStyles = makeStyles(styles);
 
 export default function SignIn(props) {
+
+  const state = useContext(AppStateContext);
+  const dispatch = useContext(AppDispatchContext);
 
   const classes = useStyles();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const onSubmit = (e) => {
+    Service.signIn(JSON.stringify({email, password}))
+      .then((response) => {
+        const data = response.data;
+        if (data) {
+          dispatch(Action.setAuthStatus(true));
+          dispatch(Action.setCurrentUser(data.user));
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     e.preventDefault();
+  }
+
+  if (state.root.isAuthenticated) {
+    return(
+      <Redirect to="/dashboards" />
+    )
   }
 
   return (

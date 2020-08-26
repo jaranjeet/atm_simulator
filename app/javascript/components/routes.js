@@ -6,16 +6,19 @@ import {
   Redirect
 } from 'react-router-dom';
 
+import ErrorBoundary from './ErrorBoundary';
 import SignIn from './SignIn';
 
 export default function Routes(props) {
   return (
     <Router>
-      <Switch>
-        <Route exact path={['/', '/sign_in']}>
-          <SignIn signup_path="/sign_up"/>
-        </Route>
-      </Switch>
+      <ErrorBoundary>
+        <Switch>
+          <Route exact path={['/', '/sign_in']}>
+            <SignIn signup_path="/sign_up"/>
+          </Route>
+        </Switch>
+      </ErrorBoundary>
     </Router>
   );
 }
