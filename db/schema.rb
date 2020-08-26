@@ -10,10 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_26_062816) do
+ActiveRecord::Schema.define(version: 2020_08_26_093048) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.integer "type", default: 1, null: false
+    t.float "balance", default: 0.0, null: false
+    t.float "interest_rate"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_accounts_on_user_id"
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.float "amount"
+    t.bigint "account_id"
+    t.index ["account_id"], name: "index_transactions_on_account_id"
+  end
+
+  create_table "user_accounts", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "account_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["account_id"], name: "index_user_accounts_on_account_id"
+    t.index ["user_id"], name: "index_user_accounts_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
