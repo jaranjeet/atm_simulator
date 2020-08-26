@@ -8,6 +8,7 @@ import {
 
 import ErrorBoundary from './ErrorBoundary';
 import SignIn from './SignIn';
+import Dashboard from './Dashboard';
 
 export default function Routes(props) {
   return (
@@ -16,6 +17,9 @@ export default function Routes(props) {
         <Switch>
           <Route exact path={['/', '/sign_in']}>
             <SignIn signup_path="/sign_up"/>
+          </Route>
+          <Route exact path="/dashboards">
+            <Dashboard />
           </Route>
         </Switch>
       </ErrorBoundary>
